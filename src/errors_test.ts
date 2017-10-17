@@ -16,12 +16,12 @@ import {AppAuthError} from './errors';
 
 describe('Errors Tests', () => {
 
-  const message = 'Something bad happened';
+     const message = 'Something bad happened';
 
-  it('Initialization of an error message should work.', () => {
-    let error = new AppAuthError(message);
-    expect(error).toBeTruthy();
-    expect(error.message).toBe(message);
-  });
+     it('Initialization of an error message should work.', () => {
+          let error = new AppAuthError(message);
+          expect(error).toBeTruthy();
+          expect(error.message).toBe(message);
+     });
 
 });

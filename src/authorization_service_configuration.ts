@@ -19,9 +19,9 @@ import {JQueryRequestor, Requestor} from './xhr';
  * Represents AuthorizationServiceConfiguration as a JSON object.
  */
 export interface AuthorizationServiceConfigurationJson {
-  authorization_endpoint: string;
-  token_endpoint: string;
-  revocation_endpoint: string;
+     authorization_endpoint: string;
+     token_endpoint: string;
+     revocation_endpoint: string;
 }
 
 /**
@@ -40,32 +40,33 @@ const OPENID_CONFIGURATION = 'openid-configuration';
  * Configuration details required to interact with an authorization service.
  */
 export class AuthorizationServiceConfiguration {
-  constructor(
-      public authorizationEndpoint: string,
-      public tokenEndpoint: string,
-      public revocationEndpoint: string) {}
+     constructor(
+         public authorizationEndpoint: string,
+         public tokenEndpoint: string,
+         public revocationEndpoint: string) {}
 
-  toJson() {
-    return {
-      authorization_endpoint: this.authorizationEndpoint,
-      token_endpoint: this.tokenEndpoint,
-      revocation_endpoint: this.revocationEndpoint
-    };
-  }
+     toJson() {
+          return {
+               authorization_endpoint: this.authorizationEndpoint,
+               token_endpoint: this.tokenEndpoint,
+               revocation_endpoint: this.revocationEndpoint
+          };
+     }
 
-  static fromJson(json: AuthorizationServiceConfigurationJson): AuthorizationServiceConfiguration {
-    return new AuthorizationServiceConfiguration(
-        json.authorization_endpoint, json.token_endpoint, json.revocation_endpoint);
-  }
+     static fromJson(json: AuthorizationServiceConfigurationJson):
+         AuthorizationServiceConfiguration {
+          return new AuthorizationServiceConfiguration(
+              json.authorization_endpoint, json.token_endpoint, json.revocation_endpoint);
+     }
 
-  static fetchFromIssuer(openIdIssuerUrl: string, requestor?: Requestor):
-      Promise<AuthorizationServiceConfiguration> {
-    const fullUrl = `${openIdIssuerUrl}/${WELL_KNOWN_PATH}/${OPENID_CONFIGURATION}`;
+     static async fetchFromIssuer(openIdIssuerUrl: string, requestor?: Requestor) {
+          const fullUrl = `${openIdIssuerUrl}/${WELL_KNOWN_PATH}/${OPENID_CONFIGURATION}`;
 
-    const requestorToUse = requestor || new JQueryRequestor();
+          const requestorToUse = requestor || new JQueryRequestor();
 
-    return requestorToUse
-        .xhr<AuthorizationServiceConfigurationJson>({url: fullUrl, dataType: 'json'})
-        .then(json => AuthorizationServiceConfiguration.fromJson(json));
-  }
+          let json = await requestorToUse.xhr<AuthorizationServiceConfigurationJson>(
+              {url: fullUrl, dataType: 'json'});
+
+          return AuthorizationServiceConfiguration.fromJson(json);
+     }
 }

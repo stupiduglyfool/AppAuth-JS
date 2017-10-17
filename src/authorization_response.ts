@@ -16,18 +16,18 @@
  * Represents the AuthorizationResponse as a JSON object.
  */
 export interface AuthorizationResponseJson {
-  code: string;
-  state: string;
+     code: string;
+     state: string;
 }
 
 /**
  * Represents the AuthorizationError as a JSON object.
  */
 export interface AuthorizationErrorJson {
-  error: string;
-  error_description?: string;
-  error_uri?: string;
-  state?: string;
+     error: string;
+     error_description?: string;
+     error_uri?: string;
+     state?: string;
 }
 
 /**
@@ -36,15 +36,15 @@ export interface AuthorizationErrorJson {
  * https://tools.ietf.org/html/rfc6749#section-4.1.2
  */
 export class AuthorizationResponse {
-  constructor(public code: string, public state: string) {}
+     constructor(public code: string, public state: string) {}
 
-  toJson(): AuthorizationResponseJson {
-    return {code: this.code, state: this.state};
-  }
+     toJson(): AuthorizationResponseJson {
+          return {code: this.code, state: this.state};
+     }
 
-  static fromJson(json: AuthorizationResponseJson): AuthorizationResponse {
-    return new AuthorizationResponse(json.code, json.state);
-  }
+     static fromJson(json: AuthorizationResponseJson): AuthorizationResponse {
+          return new AuthorizationResponse(json.code, json.state);
+     }
 }
 
 /**
@@ -53,22 +53,23 @@ export class AuthorizationResponse {
  * https://tools.ietf.org/html/rfc6749#section-4.1.2.1
  */
 export class AuthorizationError {
-  constructor(
-      public error: string,
-      public errorDescription?: string,
-      public errorUri?: string,
-      public state?: string) {}
+     constructor(
+         public error: string,
+         public errorDescription?: string,
+         public errorUri?: string,
+         public state?: string) {}
 
-  toJson(): AuthorizationErrorJson {
-    return {
-      error: this.error,
-      error_description: this.errorDescription,
-      error_uri: this.errorUri,
-      state: this.state
-    };
-  }
+     toJson(): AuthorizationErrorJson {
+          return {
+               error: this.error,
+               error_description: this.errorDescription,
+               error_uri: this.errorUri,
+               state: this.state
+          };
+     }
 
-  static fromJson(json: AuthorizationErrorJson): AuthorizationError {
-    return new AuthorizationError(json.error, json.error_description, json.error_uri, json.state);
-  }
+     static fromJson(json: AuthorizationErrorJson): AuthorizationError {
+          return new AuthorizationError(
+              json.error, json.error_description, json.error_uri, json.state);
+     }
 }

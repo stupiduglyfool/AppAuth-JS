@@ -24,12 +24,12 @@ import {StringMap} from './types';
 // However AppAuth is more opionionated, and requires you to use both.
 
 export interface AuthorizationRequestJson {
-  response_type: string;
-  client_id: string;
-  redirect_uri: string;
-  state: string;
-  scope: string;
-  extras?: StringMap;
+     response_type: string;
+     client_id: string;
+     redirect_uri: string;
+     state: string;
+     scope: string;
+     extras?: StringMap;
 }
 
 /**
@@ -37,7 +37,7 @@ export interface AuthorizationRequestJson {
  */
 const BYTES_LENGTH = 10;  // 10 bytes
 const newState = function(): string {
-  return generateRandom(BYTES_LENGTH);
+     return generateRandom(BYTES_LENGTH);
 };
 
 /**
@@ -46,48 +46,48 @@ const newState = function(): string {
  * https://tools.ietf.org/html/rfc6749#section-4.1.1
  */
 export class AuthorizationRequest {
-  static RESPONSE_TYPE_CODE = 'code';
+     static RESPONSE_TYPE_CODE = 'code';
 
-  state: string;
-  /**
-   * Constructs a new AuthorizationRequest.
-   * Use a `undefined` value for the `state` parameter, to generate a random
-   * state for CSRF protection.
-   */
-  constructor(
-      public clientId: string,
-      public redirectUri: string,
-      public scope: string,
-      public responseType: string = AuthorizationRequest.RESPONSE_TYPE_CODE,
-      state?: string,
-      public extras?: StringMap) {
-    this.state = state || newState();
-  }
+     state: string;
+     /**
+      * Constructs a new AuthorizationRequest.
+      * Use a `undefined` value for the `state` parameter, to generate a random
+      * state for CSRF protection.
+      */
+     constructor(
+         public clientId: string,
+         public redirectUri: string,
+         public scope: string,
+         public responseType: string = AuthorizationRequest.RESPONSE_TYPE_CODE,
+         state?: string,
+         public extras?: StringMap) {
+          this.state = state || newState();
+     }
 
-  /**
-   * Serializes the AuthorizationRequest to a JavaScript Object.
-   */
-  toJson(): AuthorizationRequestJson {
-    return {
-      response_type: this.responseType,
-      client_id: this.clientId,
-      redirect_uri: this.redirectUri,
-      scope: this.scope,
-      state: this.state,
-      extras: this.extras
-    };
-  }
+     /**
+      * Serializes the AuthorizationRequest to a JavaScript Object.
+      */
+     toJson(): AuthorizationRequestJson {
+          return {
+               response_type: this.responseType,
+               client_id: this.clientId,
+               redirect_uri: this.redirectUri,
+               scope: this.scope,
+               state: this.state,
+               extras: this.extras
+          };
+     }
 
-  /**
-   * Creates a new instance of AuthorizationRequest.
-   */
-  static fromJson(input: AuthorizationRequestJson): AuthorizationRequest {
-    return new AuthorizationRequest(
-        input.client_id,
-        input.redirect_uri,
-        input.scope,
-        input.response_type,
-        input.state,
-        input.extras);
-  }
+     /**
+      * Creates a new instance of AuthorizationRequest.
+      */
+     static fromJson(input: AuthorizationRequestJson): AuthorizationRequest {
+          return new AuthorizationRequest(
+              input.client_id,
+              input.redirect_uri,
+              input.scope,
+              input.response_type,
+              input.state,
+              input.extras);
+     }
 }

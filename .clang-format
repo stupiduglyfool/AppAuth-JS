@@ -1,6 +1,6 @@
 ---
 BasedOnStyle: Google
-IndentWidth: 2
+IndentWidth: 5
 ---
 Language: JavaScript
 ColumnLimit: 100

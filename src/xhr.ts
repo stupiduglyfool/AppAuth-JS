@@ -23,20 +23,21 @@ export abstract class Requestor { abstract xhr<T>(settings: JQueryAjaxSettings):
  * Uses $.ajax to makes the Ajax requests.
  */
 export class JQueryRequestor extends Requestor {
-  xhr<T>(settings: JQueryAjaxSettings): Promise<T> {
-    // NOTE: using jquery to make XHR's as whatwg-fetch requires
-    // that I target ES6.
-    const xhr = $.ajax(settings);
-    return new Promise<T>((resolve, reject) => {
-      xhr.then(
-          (data, textStatus, jqXhr) => {
-            resolve(data as T);
-          },
-          (jqXhr, textStatus, error) => {
-            reject(new AppAuthError(error));
+     xhr<T>(settings: JQueryAjaxSettings): Promise<T> {
+          // NOTE: using jquery to make XHR's as whatwg-fetch requires
+          // that I target ES6.
+          const xhr = $.ajax(settings);
+
+          return new Promise<T>((resolve, reject) => {
+               xhr.then(
+                   (data, textStatus, jqXhr) => {
+                        resolve(data as T);
+                   },
+                   (jqXhr, textStatus, error) => {
+                        reject(new AppAuthError(error));
+                   });
           });
-    });
-  }
+     }
 }
 
 /**
@@ -44,10 +45,10 @@ export class JQueryRequestor extends Requestor {
  * Promise to mock the behavior of the Requestor.
  */
 export class TestRequestor extends Requestor {
-  constructor(public promise: Promise<any>) {
-    super();
-  }
-  xhr<T>(settings: JQueryAjaxSettings): Promise<T> {
-    return this.promise;  // unsafe cast
-  }
+     constructor(public promise: Promise<any>) {
+          super();
+     }
+     xhr<T>(settings: JQueryAjaxSettings): Promise<T> {
+          return this.promise;  // unsafe cast
+     }
 }

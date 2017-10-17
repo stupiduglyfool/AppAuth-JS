@@ -21,11 +21,11 @@ export const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
  * Represents the Token Request as JSON.
  */
 export interface TokenRequestJson {
-  grant_type: string;
-  code?: string;
-  refresh_token?: string, redirect_uri: string;
-  client_id: string;
-  extras?: StringMap;
+     grant_type: string;
+     code?: string;
+     refresh_token?: string, redirect_uri: string;
+     client_id: string;
+     extras?: StringMap;
 }
 
 
@@ -35,64 +35,64 @@ export interface TokenRequestJson {
  * https://tools.ietf.org/html/rfc6749#section-4.1.3
  */
 export class TokenRequest {
-  constructor(
-      public clientId: string,
-      public redirectUri: string,
-      // TODO(rahulrav@): Add the ability to infer grant types.
-      public grantType: string,
-      public code?: string,
-      public refreshToken?: string,
-      public extras?: StringMap) {}
+     constructor(
+         public clientId: string,
+         public redirectUri: string,
+         // TODO(rahulrav@): Add the ability to infer grant types.
+         public grantType: string,
+         public code?: string,
+         public refreshToken?: string,
+         public extras?: StringMap) {}
 
-  /**
-   * Serializes a TokenRequest to a JavaScript object.
-   */
-  toJson(): TokenRequestJson {
-    return {
-      grant_type: this.grantType,
-      code: this.code,
-      refresh_token: this.refreshToken,
-      redirect_uri: this.redirectUri,
-      client_id: this.clientId,
-      extras: this.extras
-    };
-  }
+     /**
+      * Serializes a TokenRequest to a JavaScript object.
+      */
+     toJson(): TokenRequestJson {
+          return {
+               grant_type: this.grantType,
+               code: this.code,
+               refresh_token: this.refreshToken,
+               redirect_uri: this.redirectUri,
+               client_id: this.clientId,
+               extras: this.extras
+          };
+     }
 
-  toStringMap(): StringMap {
-    let map: StringMap = {
-      grant_type: this.grantType,
-      client_id: this.clientId,
-      redirect_uri: this.redirectUri
-    };
+     toStringMap(): StringMap {
+          let map: StringMap = {
+               grant_type: this.grantType,
+               client_id: this.clientId,
+               redirect_uri: this.redirectUri
+          };
 
-    if (this.code) {
-      map['code'] = this.code;
-    }
+          if (this.code) {
+               map['code'] = this.code;
+          }
 
-    if (this.refreshToken) {
-      map['refresh_token'] = this.refreshToken;
-    }
+          if (this.refreshToken) {
+               map['refresh_token'] = this.refreshToken;
+          }
 
-    // copy over extras
-    if (this.extras) {
-      for (let extra in this.extras) {
-        if (this.extras.hasOwnProperty(extra) && !map.hasOwnProperty(extra)) {
-          // check before inserting to requestMap
-          map[extra] = this.extras[extra];
-        }
-      }
-    }
+          // copy over extras
+          if (this.extras) {
+               for (let extra in this.extras) {
+                    if (this.extras.hasOwnProperty(extra) && !map.hasOwnProperty(extra)) {
+                         // check before inserting to requestMap
+                         map[extra] = this.extras[extra];
+                    }
+               }
+          }
 
-    return map;
-  }
+          return map;
+     }
 
-  static fromJson(input: TokenRequestJson): TokenRequest {
-    return new TokenRequest(
-        input.client_id,
-        input.redirect_uri,
-        input.grant_type,
-        input.code,
-        input.refresh_token,
-        input.extras);
-  }
+     static fromJson(input: TokenRequestJson): TokenRequest {
+          return new TokenRequest(
+              input.client_id,
+              input.redirect_uri,
+              input.grant_type,
+              input.code,
+              input.refresh_token,
+              input.extras);
+     }
 }

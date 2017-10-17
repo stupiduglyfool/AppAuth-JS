@@ -18,64 +18,65 @@ import {TestRequestor} from './xhr';
 
 describe('Authorization Service Configuration Tests', () => {
 
-  const authorizationEndpoint = 'authorization://endpoint'
-  const tokenEndpoint = 'token://endpoint';
-  const revocationEndpoint = 'revocation://endpoint';
+     const authorizationEndpoint = 'authorization://endpoint'
+     const tokenEndpoint = 'token://endpoint';
+     const revocationEndpoint = 'revocation://endpoint';
 
-  it('Initialization should work', () => {
-    let configuration = new AuthorizationServiceConfiguration(
-        authorizationEndpoint, tokenEndpoint, revocationEndpoint);
+     it('Initialization should work', () => {
+          let configuration = new AuthorizationServiceConfiguration(
+              authorizationEndpoint, tokenEndpoint, revocationEndpoint);
 
-    expect(configuration).toBeTruthy();
-    expect(configuration.authorizationEndpoint).toBe(authorizationEndpoint);
-    expect(configuration.tokenEndpoint).toBe(tokenEndpoint);
-    expect(configuration.revocationEndpoint).toBe(revocationEndpoint);
-  });
+          expect(configuration).toBeTruthy();
+          expect(configuration.authorizationEndpoint).toBe(authorizationEndpoint);
+          expect(configuration.tokenEndpoint).toBe(tokenEndpoint);
+          expect(configuration.revocationEndpoint).toBe(revocationEndpoint);
+     });
 
-  it('Conversion to Json and back should work', () => {
-    let configuration = new AuthorizationServiceConfiguration(
-        authorizationEndpoint, tokenEndpoint, revocationEndpoint);
+     it('Conversion to Json and back should work', () => {
+          let configuration = new AuthorizationServiceConfiguration(
+              authorizationEndpoint, tokenEndpoint, revocationEndpoint);
 
-    let json = configuration.toJson();
-    let newConfiguration = AuthorizationServiceConfiguration.fromJson(json);
-    expect(newConfiguration).toBeTruthy();
-    expect(newConfiguration.authorizationEndpoint).toBe(configuration.authorizationEndpoint);
-    expect(newConfiguration.tokenEndpoint).toBe(configuration.tokenEndpoint);
-    expect(newConfiguration.revocationEndpoint).toBe(configuration.revocationEndpoint);
-  });
+          let json = configuration.toJson();
+          let newConfiguration = AuthorizationServiceConfiguration.fromJson(json);
+          expect(newConfiguration).toBeTruthy();
+          expect(newConfiguration.authorizationEndpoint).toBe(configuration.authorizationEndpoint);
+          expect(newConfiguration.tokenEndpoint).toBe(configuration.tokenEndpoint);
+          expect(newConfiguration.revocationEndpoint).toBe(configuration.revocationEndpoint);
+     });
 
-  describe('Tests with dependencies', () => {
+     describe('Tests with dependencies', () => {
 
-    it('Fetch from issuer tests should work', (done: DoneFn) => {
-      let configuration = new AuthorizationServiceConfiguration(
-          authorizationEndpoint, tokenEndpoint, revocationEndpoint);
-      let promise: Promise<AuthorizationServiceConfigurationJson> =
-          Promise.resolve(configuration.toJson());
-      let requestor = new TestRequestor(promise);
-      AuthorizationServiceConfiguration.fetchFromIssuer('some://endpoint', requestor)
-          .then(result => {
-            expect(result).toBeTruthy();
-            expect(result.authorizationEndpoint).toBe(configuration.authorizationEndpoint);
-            expect(result.tokenEndpoint).toBe(configuration.tokenEndpoint);
-            expect(result.revocationEndpoint).toBe(configuration.revocationEndpoint);
-            done();
+          it('Fetch from issuer tests should work', (done: DoneFn) => {
+               let configuration = new AuthorizationServiceConfiguration(
+                   authorizationEndpoint, tokenEndpoint, revocationEndpoint);
+               let promise: Promise<AuthorizationServiceConfigurationJson> =
+                   Promise.resolve(configuration.toJson());
+               let requestor = new TestRequestor(promise);
+               AuthorizationServiceConfiguration.fetchFromIssuer('some://endpoint', requestor)
+                   .then(result => {
+                        expect(result).toBeTruthy();
+                        expect(result.authorizationEndpoint)
+                            .toBe(configuration.authorizationEndpoint);
+                        expect(result.tokenEndpoint).toBe(configuration.tokenEndpoint);
+                        expect(result.revocationEndpoint).toBe(configuration.revocationEndpoint);
+                        done();
+                   });
           });
-    });
 
-    it('Fetch from issuer tests should work', (done: DoneFn) => {
-      let promise: Promise<AuthorizationServiceConfigurationJson> =
-          Promise.reject(new Error('Something bad happened.'));
-      let requestor = new TestRequestor(promise);
+          it('Fetch from issuer tests should work', (done: DoneFn) => {
+               let promise: Promise<AuthorizationServiceConfigurationJson> =
+                   Promise.reject(new Error('Something bad happened.'));
+               let requestor = new TestRequestor(promise);
 
-      AuthorizationServiceConfiguration.fetchFromIssuer('some://endpoint', requestor)
-          .catch(result => {
-            expect(result).toBeTruthy();
-            let error = result as AppAuthError;
-            expect(error.message).toBe('Something bad happened.');
-            done();
+               AuthorizationServiceConfiguration.fetchFromIssuer('some://endpoint', requestor)
+                   .catch(result => {
+                        expect(result).toBeTruthy();
+                        let error = result as AppAuthError;
+                        expect(error.message).toBe('Something bad happened.');
+                        done();
+                   });
           });
-    });
 
-  });
+     });
 
 });

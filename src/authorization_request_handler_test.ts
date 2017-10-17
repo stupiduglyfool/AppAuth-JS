@@ -12,17 +12,16 @@
  * limitations under the License.
  */
 
-import {AuthorizationNotifier, AuthorizationRequestHandler} from './authorization_request_handler';
+import {AuthorizationRequestHandler} from './authorization_request_handler';
 
 describe('Tests for the Authorization Request handler', () => {
 
-  describe('Basic protocol tests', () => {
+     describe('Basic protocol tests', () => {
 
-    it('Basic authorization flow tests', (done: DoneFn) => {
-      let notifier = new AuthorizationNotifier();
-      done();
-    });
+          it('Basic authorization flow tests', (done: DoneFn) => {
+               done();
+          });
 
-  });
+     });
 
 });

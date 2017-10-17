@@ -20,11 +20,11 @@
  * testing.
  */
 export interface UnderlyingStorage {
-  readonly length: number;
-  clear(): void;
-  getItem(key: string): string|null;
-  removeItem(key: string): void;
-  setItem(key: string, data: string): void;
+     readonly length: number;
+     clear(): void;
+     getItem(key: string): string|null;
+     removeItem(key: string): void;
+     setItem(key: string, data: string): void;
 }
 
 /**
@@ -33,68 +33,68 @@ export interface UnderlyingStorage {
  * IDL type (as it is the lowest common denominator).
  */
 export abstract class StorageBackend {
-  /**
-   * When passed a key `name`, will return that key's value.
-   */
-  public abstract getItem(name: string): Promise<string|null>;
+     /**
+      * When passed a key `name`, will return that key's value.
+      */
+     public abstract getItem(name: string): Promise<string|null>;
 
-  /**
-   * When passed a key `name`, will remove that key from the storage.
-   */
-  public abstract removeItem(name: string): Promise<void>;
+     /**
+      * When passed a key `name`, will remove that key from the storage.
+      */
+     public abstract removeItem(name: string): Promise<void>;
 
-  /**
-   * When invoked, will empty all keys out of the storage.
-   */
-  public abstract clear(): Promise<void>;
+     /**
+      * When invoked, will empty all keys out of the storage.
+      */
+     public abstract clear(): Promise<void>;
 
-  /**
-   * The setItem() method of the `StorageBackend` interface,
-   * when passed a key name and value, will add that key to the storage,
-   * or update that key's value if it already exists.
-   */
-  public abstract setItem(name: string, value: string): Promise<void>;
+     /**
+      * The setItem() method of the `StorageBackend` interface,
+      * when passed a key name and value, will add that key to the storage,
+      * or update that key's value if it already exists.
+      */
+     public abstract setItem(name: string, value: string): Promise<void>;
 }
 
 /**
  * A `StorageBackend` backed by `localstorage`.
  */
 export class LocalStorageBackend extends StorageBackend {
-  private storage: UnderlyingStorage;
-  constructor(storage?: UnderlyingStorage) {
-    super();
-    this.storage = storage || window.localStorage;
-  }
+     private storage: UnderlyingStorage;
+     constructor(storage?: UnderlyingStorage) {
+          super();
+          this.storage = storage || window.localStorage;
+     }
 
-  public getItem(name: string): Promise<string|null> {
-    return new Promise<string|null>((resolve, reject) => {
-      const value = this.storage.getItem(name);
-      if (value) {
-        resolve(value);
-      } else {
-        resolve(null);
-      }
-    });
-  }
+     public getItem(name: string): Promise<string|null> {
+          return new Promise<string|null>((resolve, reject) => {
+               const value = this.storage.getItem(name);
+               if (value) {
+                    resolve(value);
+               } else {
+                    resolve(null);
+               }
+          });
+     }
 
-  public removeItem(name: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.storage.removeItem(name);
-      resolve();
-    });
-  }
+     public removeItem(name: string): Promise<void> {
+          return new Promise<void>((resolve, reject) => {
+               this.storage.removeItem(name);
+               resolve();
+          });
+     }
 
-  public clear(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.storage.clear();
-      resolve();
-    });
-  }
+     public clear(): Promise<void> {
+          return new Promise<void>((resolve, reject) => {
+               this.storage.clear();
+               resolve();
+          });
+     }
 
-  public setItem(name: string, value: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.storage.setItem(name, value);
-      resolve();
-    });
-  }
+     public setItem(name: string, value: string): Promise<void> {
+          return new Promise<void>((resolve, reject) => {
+               this.storage.setItem(name, value);
+               resolve();
+          });
+     }
 }

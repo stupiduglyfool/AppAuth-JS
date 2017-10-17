@@ -16,67 +16,67 @@ import {TokenError, TokenResponse} from './token_response';
 
 describe('Token Response tests', () => {
 
-  const accessToken = 'accessToken';
+     const accessToken = 'accessToken';
 
-  it('Basic Token Response Tests', () => {
-    let response = new TokenResponse(accessToken);
-    expect(response).not.toBeNull();
-    expect(response.accessToken).toBe(accessToken);
-    expect(response.tokenType).toBe('bearer');
-    expect(response.issuedAt).toBeTruthy();
-    expect(response.isValid()).toBe(true);
-    expect(response.refreshToken).toBeFalsy();
-    expect(response.scope).toBeFalsy();
-  });
+     it('Basic Token Response Tests', () => {
+          let response = new TokenResponse(accessToken);
+          expect(response).not.toBeNull();
+          expect(response.accessToken).toBe(accessToken);
+          expect(response.tokenType).toBe('bearer');
+          expect(response.issuedAt).toBeTruthy();
+          expect(response.isValid()).toBe(true);
+          expect(response.refreshToken).toBeFalsy();
+          expect(response.scope).toBeFalsy();
+     });
 
-  it('Test response token validity', () => {
-    let response = new TokenResponse(
-        accessToken,
-        undefined /* refresh token */,
-        undefined /* scope */,
-        'bearer',
-        1 /* issued at */,
-        1000 /* expires in*/
-    );
+     it('Test response token validity', () => {
+          let response = new TokenResponse(
+              accessToken,
+              undefined /* refresh token */,
+              undefined /* scope */,
+              'bearer',
+              1 /* issued at */,
+              1000 /* expires in*/
+          );
 
-    expect(response).not.toBeNull();
-    expect(response.accessToken).toBe(accessToken);
-    expect(response.tokenType).toBe('bearer');
-    expect(response.issuedAt).toBeTruthy();
-    expect(response.isValid()).toBe(false);
-    expect(response.refreshToken).toBeFalsy();
-    expect(response.scope).toBeFalsy();
-  });
+          expect(response).not.toBeNull();
+          expect(response.accessToken).toBe(accessToken);
+          expect(response.tokenType).toBe('bearer');
+          expect(response.issuedAt).toBeTruthy();
+          expect(response.isValid()).toBe(false);
+          expect(response.refreshToken).toBeFalsy();
+          expect(response.scope).toBeFalsy();
+     });
 
-  it('To Json() and from Json() should work', () => {
-    let response = new TokenResponse(accessToken);
-    let json = JSON.parse(JSON.stringify(response.toJson()));
-    let newResponse = TokenResponse.fromJson(json);
-    expect(newResponse).not.toBeNull();
-    expect(newResponse.accessToken).toBe(accessToken);
-    expect(newResponse.tokenType).toBe('bearer');
-    expect(newResponse.issuedAt).toBeTruthy();
-    expect(newResponse.isValid()).toBe(true);
-    expect(newResponse.refreshToken).toBeFalsy();
-    expect(newResponse.scope).toBeFalsy();
-  });
+     it('To Json() and from Json() should work', () => {
+          let response = new TokenResponse(accessToken);
+          let json = JSON.parse(JSON.stringify(response.toJson()));
+          let newResponse = TokenResponse.fromJson(json);
+          expect(newResponse).not.toBeNull();
+          expect(newResponse.accessToken).toBe(accessToken);
+          expect(newResponse.tokenType).toBe('bearer');
+          expect(newResponse.issuedAt).toBeTruthy();
+          expect(newResponse.isValid()).toBe(true);
+          expect(newResponse.refreshToken).toBeFalsy();
+          expect(newResponse.scope).toBeFalsy();
+     });
 
-  it('Basic Token Error Tests', () => {
-    let error = new TokenError('invalid_client');
-    expect(error).toBeTruthy();
-    expect(error.error).toBe('invalid_client');
-    expect(error.errorDescription).toBeFalsy();
-    expect(error.errorUri).toBeFalsy();
-  });
+     it('Basic Token Error Tests', () => {
+          let error = new TokenError('invalid_client');
+          expect(error).toBeTruthy();
+          expect(error.error).toBe('invalid_client');
+          expect(error.errorDescription).toBeFalsy();
+          expect(error.errorUri).toBeFalsy();
+     });
 
-  it('To Json and from JSON should work for errors', () => {
-    let error = new TokenError('invalid_client');
-    let json = JSON.parse(JSON.stringify(error.toJson()));
-    let newError = TokenError.fromJson(json);
-    expect(newError).toBeTruthy();
-    expect(newError.error).toBe('invalid_client');
-    expect(newError.errorDescription).toBeFalsy();
-    expect(newError.errorUri).toBeFalsy();
-  });
+     it('To Json and from JSON should work for errors', () => {
+          let error = new TokenError('invalid_client');
+          let json = JSON.parse(JSON.stringify(error.toJson()));
+          let newError = TokenError.fromJson(json);
+          expect(newError).toBeTruthy();
+          expect(newError.error).toBe('invalid_client');
+          expect(newError.errorDescription).toBeFalsy();
+          expect(newError.errorUri).toBeFalsy();
+     });
 
 });

@@ -27,63 +27,63 @@ import {JQueryRequestor, Requestor} from './xhr';
  * Represents an interface which can make a token request.
  */
 export interface TokenRequestHandler {
-  /**
-   * Performs the token request, given the service configuration.
-   */
-  performTokenRequest(configuration: AuthorizationServiceConfiguration, request: TokenRequest):
-      Promise<TokenResponse>;
+     /**
+      * Performs the token request, given the service configuration.
+      */
+     performTokenRequest(configuration: AuthorizationServiceConfiguration, request: TokenRequest):
+         Promise<TokenResponse>;
 
-  performRevokeTokenRequest(
-      configuration: AuthorizationServiceConfiguration,
-      request: RevokeTokenRequest): Promise<boolean>;
+     performRevokeTokenRequest(
+         configuration: AuthorizationServiceConfiguration,
+         request: RevokeTokenRequest): Promise<boolean>;
 }
 
 /**
  * The default token request handler.
  */
 export class BaseTokenRequestHandler implements TokenRequestHandler {
-  constructor(
-      public readonly requestor: Requestor = new JQueryRequestor(),
-      public readonly utils: QueryStringUtils = new BasicQueryStringUtils()) {}
+     constructor(
+         public readonly requestor: Requestor = new JQueryRequestor(),
+         public readonly utils: QueryStringUtils = new BasicQueryStringUtils()) {}
 
-  private isTokenResponse(response: TokenResponseJson|
-                          TokenErrorJson): response is TokenResponseJson {
-    return (response as TokenErrorJson).error === undefined;
-  }
+     private isTokenResponse(response: TokenResponseJson|
+                             TokenErrorJson): response is TokenResponseJson {
+          return (response as TokenErrorJson).error === undefined;
+     }
 
-  performRevokeTokenRequest(
-      configuration: AuthorizationServiceConfiguration,
-      request: RevokeTokenRequest): Promise<boolean> {
-    let revokeTokenResponse = this.requestor.xhr<boolean>({
-      url: configuration.revocationEndpoint,
-      method: 'POST',
-      dataType: 'json',  // adding implicit dataType
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      data: request.toJson()
-    });
 
-    return revokeTokenResponse.then(response => {
-      return true;
-    });
-  }
+     async performRevokeTokenRequest(
+         configuration: AuthorizationServiceConfiguration,
+         request: RevokeTokenRequest) {
+          return await this.requestor.xhr<boolean>({
+               url: configuration.revocationEndpoint,
+               method: 'POST',
+               dataType: 'json',  // adding implicit dataType
+               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+               data: request.toJson()
+          });
+     }
 
-  performTokenRequest(configuration: AuthorizationServiceConfiguration, request: TokenRequest):
-      Promise<TokenResponse> {
-    let tokenResponse = this.requestor.xhr<TokenResponseJson|TokenErrorJson>({
-      url: configuration.tokenEndpoint,
-      method: 'POST',
-      dataType: 'json',  // adding implicit dataType
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      data: this.utils.stringify(request.toStringMap())
-    });
+     async performTokenRequest(
+         configuration: AuthorizationServiceConfiguration,
+         request: TokenRequest) {
+          let response: TokenResponseJson|TokenErrorJson;
 
-    return tokenResponse.then(response => {
-      if (this.isTokenResponse(response)) {
-        return TokenResponse.fromJson(response);
-      } else {
-        return Promise.reject<TokenResponse>(
-            new AppAuthError(response.error, TokenError.fromJson(response)));
-      }
-    });
-  }
+          try {
+               response = await this.requestor.xhr<TokenResponseJson|TokenErrorJson>({
+                    url: configuration.tokenEndpoint,
+                    method: 'POST',
+                    dataType: 'json',  // adding implicit dataType
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    data: this.utils.stringify(request.toStringMap())
+               });
+          } catch (ex) {
+               throw ex;
+          }
+
+          if (!this.isTokenResponse(response))
+               throw new AppAuthError(response.error, TokenError.fromJson(response));
+
+          return TokenResponse.fromJson(response);
+     }
 }

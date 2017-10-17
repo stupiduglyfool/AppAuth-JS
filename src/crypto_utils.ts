@@ -18,27 +18,27 @@ const HAS_CRYPTO = typeof window !== 'undefined' && !!(window.crypto as any);
 const IS_NODE = typeof process === 'object';
 
 export function generateRandom(sizeInBytes: number = DEFAULT_SIZE) {
-  let buffer: Uint8Array = new Uint8Array(sizeInBytes);
-  if (HAS_CRYPTO) {
-    window.crypto.getRandomValues(buffer);
-  } else if (IS_NODE) {
-    // warning: implicit any
-    let crypto = require('crypto');
-    let bytes = crypto.randomBytes(sizeInBytes);
-    // copy
-    for (let i = 0; i < bytes.length; i += 1) {
-      buffer[i] = bytes[i];
-    }
-  } else {
-    // fall back to Math.random() if nothing else is available
-    for (let i = 0; i < sizeInBytes; i += 1) {
-      buffer[i] = Math.random();
-    }
-  }
-  let state = [];
-  for (let i = 0; i < sizeInBytes; i += 1) {
-    let index = (buffer[i] % CHARSET.length) | 0;
-    state.push(CHARSET[index]);
-  }
-  return state.join('');
+     let buffer: Uint8Array = new Uint8Array(sizeInBytes);
+     if (HAS_CRYPTO) {
+          window.crypto.getRandomValues(buffer);
+     } else if (IS_NODE) {
+          // warning: implicit any
+          let crypto = require('crypto');
+          let bytes = crypto.randomBytes(sizeInBytes);
+          // copy
+          for (let i = 0; i < bytes.length; i += 1) {
+               buffer[i] = bytes[i];
+          }
+     } else {
+          // fall back to Math.random() if nothing else is available
+          for (let i = 0; i < sizeInBytes; i += 1) {
+               buffer[i] = Math.random();
+          }
+     }
+     let state: string[] = [];
+     for (let i = 0; i < sizeInBytes; i += 1) {
+          let index = (buffer[i] % CHARSET.length) | 0;
+          state.push(CHARSET[index]);
+     }
+     return state.join('');
 }

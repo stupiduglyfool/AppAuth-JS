@@ -23,12 +23,12 @@ export type TokenType = 'bearer'|'mac';
  * Represents the TokenResponse as a JSON Object.
  */
 export interface TokenResponseJson {
-  access_token: string;
-  token_type?: TokenType; /* treating token type as optional, as its going to be inferred. */
-  issued_at?: number;     /* when was it issued ? */
-  expires_in?: number;    /* lifetime in seconds. */
-  refresh_token?: string;
-  scope?: string;
+     access_token: string;
+     token_type?: TokenType; /* treating token type as optional, as its going to be inferred. */
+     issued_at?: number;     /* when was it issued ? */
+     expires_in?: number;    /* lifetime in seconds. */
+     refresh_token?: string;
+     scope?: string;
 }
 
 /**
@@ -43,9 +43,9 @@ export type ErrorType = 'invalid_request'|'invalid_client'|'invalid_grant'|'unau
  * Represents the TokenError as a JSON Object.
  */
 export interface TokenErrorJson {
-  error: ErrorType;
-  error_description?: string;
-  error_uri?: string;
+     error: ErrorType;
+     error_description?: string;
+     error_uri?: string;
 }
 
 /**
@@ -59,44 +59,44 @@ const nowInSeconds = () => Math.round(new Date().getTime() / 1000);
  * https://tools.ietf.org/html/rfc6749#section-5.1
  */
 export class TokenResponse {
-  constructor(
-      public accessToken: string,
-      public refreshToken?: string,
-      public scope?: string,
-      public tokenType: TokenType = 'bearer',
-      public issuedAt: number = nowInSeconds(),
-      public expiresIn?: number) {}
+     constructor(
+         public accessToken: string,
+         public refreshToken?: string,
+         public scope?: string,
+         public tokenType: TokenType = 'bearer',
+         public issuedAt: number = nowInSeconds(),
+         public expiresIn?: number) {}
 
-  toJson(): TokenResponseJson {
-    return {
-      access_token: this.accessToken,
-      refresh_token: this.refreshToken,
-      scope: this.scope,
-      token_type: this.tokenType,
-      issued_at: this.issuedAt,
-      expires_in: this.expiresIn
-    };
-  }
+     toJson(): TokenResponseJson {
+          return {
+               access_token: this.accessToken,
+               refresh_token: this.refreshToken,
+               scope: this.scope,
+               token_type: this.tokenType,
+               issued_at: this.issuedAt,
+               expires_in: this.expiresIn
+          };
+     }
 
-  isValid(): boolean {
-    if (this.expiresIn) {
-      let now = nowInSeconds();
-      return now < this.issuedAt + this.expiresIn;
-    } else {
-      return true;
-    }
-  }
+     isValid(): boolean {
+          if (this.expiresIn) {
+               let now = nowInSeconds();
+               return now < this.issuedAt + this.expiresIn;
+          } else {
+               return true;
+          }
+     }
 
-  static fromJson(input: TokenResponseJson): TokenResponse {
-    const issuedAt = !input.issued_at ? nowInSeconds() : input.issued_at;
-    return new TokenResponse(
-        input.access_token,
-        input.refresh_token,
-        input.scope,
-        input.token_type,
-        issuedAt,
-        input.expires_in)
-  }
+     static fromJson(input: TokenResponseJson): TokenResponse {
+          const issuedAt = !input.issued_at ? nowInSeconds() : input.issued_at;
+          return new TokenResponse(
+              input.access_token,
+              input.refresh_token,
+              input.scope,
+              input.token_type,
+              issuedAt,
+              input.expires_in)
+     }
 }
 
 /**
@@ -105,18 +105,18 @@ export class TokenResponse {
  * https://tools.ietf.org/html/rfc6749#section-5.2
  */
 export class TokenError {
-  constructor(
-      public readonly error: ErrorType,
-      public readonly errorDescription?: string,
-      public readonly errorUri?: string) {}
+     constructor(
+         public readonly error: ErrorType,
+         public readonly errorDescription?: string,
+         public readonly errorUri?: string) {}
 
-  toJson(): TokenErrorJson {
-    return {
-      error: this.error, error_description: this.errorDescription, error_uri: this.errorUri
-    }
-  }
+     toJson(): TokenErrorJson {
+          return {
+               error: this.error, error_description: this.errorDescription, error_uri: this.errorUri
+          }
+     }
 
-  static fromJson(input: TokenErrorJson) {
-    return new TokenError(input.error, input.error_description, input.error_uri);
-  }
+     static fromJson(input: TokenErrorJson) {
+          return new TokenError(input.error, input.error_description, input.error_uri);
+     }
 }

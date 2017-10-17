@@ -1,10 +1,12 @@
 {
   "name": "@openid/appauth",
-  "version": "0.2.2",
+  "version": "0.2.9",
   "description": "A general purpose OAuth client.",
   "author": "The OpenID Foundation",
   "license": "Apache-2.0",
   "repository": "openid/AppAuth-JS",
+  "main": "./built/index.js",
+  "typings": "./built/index.d.ts",
   "bugs": {
     "url": "https://github.com/openid/AppAuth-JS/issues"
   },
@@ -24,9 +26,8 @@
     "minify": "java -jar node_modules/google-closure-compiler/compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS --js built/app/bundle.js --js_output_file built/app/bundle_minified.js",
     "precompile": "npm run-script clean && npm run-script format",
     "compile": "node_modules/.bin/tsc",
-    "prepublish": "npm run-script build-app",
     "format": "node_modules/.bin/clang-format -i -style=file --glob=src/**.ts",
-    "clean": "rm -rf built",
+    "clean": "if exist built rmdir /S /Q built",
     "pretest": "npm run-script compile",
     "test": "node_modules/.bin/karma start karma.conf --browsers=Chrome --single-run=false --debug",
     "pregzipSize": "npm run-script minify",

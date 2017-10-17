@@ -12,7 +12,8 @@
         "declaration": true,
         "noEmitOnError": true,
         "inlineSourceMap": true,
-        "inlineSources": true
+        "inlineSources": true,
+        "noImplicitAny": false
     },
     "exclude": [
         "node_modules",

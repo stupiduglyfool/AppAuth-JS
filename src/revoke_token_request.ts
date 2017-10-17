@@ -21,10 +21,10 @@ export type TokenTypeHint = 'refresh_token'|'access_token';
  * Represents the Token Request as JSON.
  */
 export interface RevokeTokenRequestJson {
-  token: string;
-  token_type_hint?: TokenTypeHint;
-  client_id?: string;
-  client_secret?: string;
+     token: string;
+     token_type_hint?: TokenTypeHint;
+     client_id?: string;
+     client_secret?: string;
 }
 
 /**
@@ -33,35 +33,35 @@ export interface RevokeTokenRequestJson {
  * https://tools.ietf.org/html/rfc7009#section-2.1
  */
 export class RevokeTokenRequest {
-  constructor(
-      public token: string,
-      public tokenTypeHint?: TokenTypeHint,
-      public clientId?: string,
-      public clientSecret?: string) {}
+     constructor(
+         public token: string,
+         public tokenTypeHint?: TokenTypeHint,
+         public clientId?: string,
+         public clientSecret?: string) {}
 
-  /**
-   * Serializes a TokenRequest to a JavaScript object.
-   */
-  toJson(): RevokeTokenRequestJson {
-    let json: RevokeTokenRequestJson = {token: this.token};
+     /**
+      * Serializes a TokenRequest to a JavaScript object.
+      */
+     toJson() {
+          let json: RevokeTokenRequestJson = {token: this.token};
 
-    if (this.tokenTypeHint) {
-      json['token_type_hint'] = this.tokenTypeHint;
-    }
+          if (this.tokenTypeHint) {
+               json['token_type_hint'] = this.tokenTypeHint;
+          }
 
-    if (this.clientId) {
-      json['client_id'] = this.clientId;
-    }
+          if (this.clientId) {
+               json['client_id'] = this.clientId;
+          }
 
-    if (this.clientSecret) {
-      json['client_secret'] = this.clientSecret;
-    }
+          if (this.clientSecret) {
+               json['client_secret'] = this.clientSecret;
+          }
 
-    return json;
-  }
+          return json;
+     }
 
-  static fromJson(input: RevokeTokenRequestJson): RevokeTokenRequest {
-    return new RevokeTokenRequest(
-        input.token, input.token_type_hint, input.client_id, input.client_secret);
-  }
+     static fromJson(input: RevokeTokenRequestJson) {
+          return new RevokeTokenRequest(
+              input.token, input.token_type_hint, input.client_id, input.client_secret);
+     }
 }
