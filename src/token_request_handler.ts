@@ -30,12 +30,15 @@ export interface TokenRequestHandler {
      /**
       * Performs the token request, given the service configuration.
       */
-     performTokenRequest(configuration: AuthorizationServiceConfiguration, request: TokenRequest):
-         Promise<TokenResponse>;
+     performTokenRequest(
+         configuration: AuthorizationServiceConfiguration,
+         request: TokenRequest,
+         extra: StringMap): Promise<TokenResponse>;
 
      performRevokeTokenRequest(
          configuration: AuthorizationServiceConfiguration,
-         request: RevokeTokenRequest): Promise<boolean>;
+         request: RevokeTokenRequest,
+         extra: StringMap): Promise<boolean>;
 }
 
 /**
@@ -54,27 +57,37 @@ export class BaseTokenRequestHandler implements TokenRequestHandler {
 
      async performRevokeTokenRequest(
          configuration: AuthorizationServiceConfiguration,
-         request: RevokeTokenRequest) {
+         request: RevokeTokenRequest,
+         extra: StringMap|null) {
+          let headers = extra ?
+              Object.assign(extra, {'Content-Type': 'application/x-www-form-urlencoded'}) :
+              {'Content-Type': 'application/x-www-form-urlencoded'};
+
           return await this.requestor.xhr<boolean>({
                url: configuration.revocationEndpoint,
                method: 'POST',
                dataType: 'json',  // adding implicit dataType
-               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+               headers: headers,
                data: request.toJson()
           });
      }
 
      async performTokenRequest(
          configuration: AuthorizationServiceConfiguration,
-         request: TokenRequest) {
+         request: TokenRequest,
+         extra: StringMap|null) {
           let response: TokenResponseJson|TokenErrorJson;
+
+          let headers = extra ?
+              Object.assign(extra, {'Content-Type': 'application/x-www-form-urlencoded'}) :
+              {'Content-Type': 'application/x-www-form-urlencoded'};
 
           try {
                response = await this.requestor.xhr<TokenResponseJson|TokenErrorJson>({
                     url: configuration.tokenEndpoint,
                     method: 'POST',
                     dataType: 'json',  // adding implicit dataType
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    headers: headers,
                     data: this.utils.stringify(request.toStringMap())
                });
           } catch (ex) {
